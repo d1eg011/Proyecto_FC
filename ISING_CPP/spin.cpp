@@ -85,10 +85,11 @@ void Spin::calcEM(){
       #pragma omp for schedule(static)
       for (unsigned int col = 0; col < N; ++col){
         #pragma omp atomic
-        energy += lattice[ (row*N) + col ]*(lattice[ ((row-1)*N)%N + col ] +
+        energy += 0.5*lattice[ (row*N) + col ]*(lattice[ ((row-1)*N)%N + col ] +
                                       lattice[ ((row+1)*N)%N + col ] +
                                       lattice[ (row*N) + (col-1)%N ] +
                                       lattice[ (row*N) + (col+1)%N ] );
+        
         magnetization += lattice[ (row*N) + col];
       }
     }
