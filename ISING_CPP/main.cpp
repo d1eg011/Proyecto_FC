@@ -1,15 +1,14 @@
-#include <iostream>
-#include <vector>
-#include <random>
-#include <omp.h>
 #include "spin.hpp"
 
 int main(){
-  unsigned int N = 50;
+  unsigned int N = 20;
   Spin lattice(N);
-  lattice.configuration_update(0.1, 1.0, 0.0, 10000).print_lattice();
-  std::cout << "Energy: " << lattice.get_energy() << " " <<
-               "Magnetization: " << lattice.get_magnetization() << std::endl;
+  lattice.configuration_update(0.0, 1.0, 0.0, 10000).print_lattice();
+  
+  lattice.configuration_update(2.0, 1.0, 0.0, 1000000).print_lattice();
+
+  std::cout << "Energy: " << lattice.calcEnergy() << " " <<
+               "Magnetization: " << lattice.calcMagnetization() << std::endl;
 
   return 0;
 }

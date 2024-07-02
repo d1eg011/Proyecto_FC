@@ -1,37 +1,13 @@
-#include <iostream>
-#include <vector>
-#include <unordered_map>
-#include <random>
-#include <cmath>
-#include <omp.h>
 #include "spin.hpp"
 
 Spin::Spin(const unsigned int &size){
   N = size;
   lattice = std::vector<int>(size*size, 1);
-  
-  #pragma omp parallel reduction(+ : energy, magnetization)
-  {
-    for (unsigned int row = 0; row < size; ++row){
-      #pragma omp for schedule(static)
-      for (unsigned int col = 0; col < size; ++col){
-        #pragma omp atomic
-        energy += lattice[ (row*N) + col ]*( lattice[ ((row-1)*N)%N + col ] + 
-                                      lattice[ ((row+1)*N)%N + col ] + 
-                                      lattice[ (row*N) + (col-1)%N ] + 
-                                      lattice[ (row*N) + (col+1)%N ] );
-        magnetization += lattice[ (row*N) + col];
-      }
-    }
-  }
-
 }
 
 Spin::Spin(const Spin &obj){
   N = obj.N;
   lattice = obj.lattice;
-  energy = obj.energy;
-  magnetization = obj.magnetization;
 }
 
 Spin::~Spin(){
@@ -41,7 +17,6 @@ Spin::~Spin(){
 Spin &Spin::operator=(const Spin &obj){
   N = obj.N;
   lattice = obj.lattice;
-  energy = obj.energy;
   
   return *this;
 }
@@ -59,14 +34,6 @@ void Spin::print_lattice(){
   }
 }
 
-int Spin::get_energy(){
-  return energy;
-  }
-
-int Spin::get_magnetization(){
-  return magnetization;
-}
-
 int Spin::close_neighbord_energy(const unsigned int &row, const unsigned int &col){
   int dE = 0;
   dE = 2*lattice[ (row*N) + col ]*( lattice[ ((row-1)*N)%N + col ] + 
@@ -76,27 +43,36 @@ int Spin::close_neighbord_energy(const unsigned int &row, const unsigned int &co
   return dE;
 }
 
-void Spin::calcEM(){
-  energy = 0;
-  magnetization = 0;
-  #pragma omp parallel reduction(+ : energy, magnetization)
+int Spin::calcEnergy(){
+  int energy = 0;
+  #pragma omp parallel reduction(+ : energy)
   {
+    #pragma omp for schedule(static) 
     for (unsigned int row = 0; row < N; ++row){
-      #pragma omp for schedule(static)
       for (unsigned int col = 0; col < N; ++col){
-        #pragma omp atomic
         energy += 0.5*lattice[ (row*N) + col ]*(lattice[ ((row-1)*N)%N + col ] +
                                       lattice[ ((row+1)*N)%N + col ] +
                                       lattice[ (row*N) + (col-1)%N ] +
                                       lattice[ (row*N) + (col+1)%N ] );
-        
-        magnetization += lattice[ (row*N) + col];
       }
     }
   }
 
+  return energy;
 }
   
+int Spin::calcMagnetization(){
+  int magnetization = 0;
+  #pragma omp parallel reduction (+ : magnetization)
+  { 
+    #pragma omp for schedule(static)
+    for (unsigned int i = 0; i < N*N; ++i){
+      magnetization += lattice[i];
+    }
+  }
+
+  return magnetization;
+}
 
 Spin Spin::configuration_update(const double &beta, const float &J, const float &H, const unsigned int &max_iter){
   int dE = 0;
@@ -104,7 +80,6 @@ Spin Spin::configuration_update(const double &beta, const float &J, const float 
   
   std::random_device rd;
   std::mt19937 rng(rd());
-  //std::uniform_int_distribution<unsigned int> rndint(0, N - 1);
   std::uniform_real_distribution<double> rndb(0, 1);
 
   std::unordered_map<int, double> probE = {
@@ -132,8 +107,6 @@ Spin Spin::configuration_update(const double &beta, const float &J, const float 
       *this = lattice_copy;
     }
   }
-
-  calcEM();
 
   return *this;
 }
