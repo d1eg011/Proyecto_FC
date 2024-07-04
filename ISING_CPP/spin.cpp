@@ -74,7 +74,8 @@ int Spin::calcMagnetization(){
   return magnetization;
 }
 
-Spin Spin::configuration_update(const double &beta, const float &J, const float &H, const unsigned int &max_iter){
+void Spin::configuration_update(const double &beta, const float &J, const float &H, const unsigned int &max_iter){
+
   int dE = 0;
   int dM = 0;
   
@@ -83,11 +84,11 @@ Spin Spin::configuration_update(const double &beta, const float &J, const float 
   std::uniform_real_distribution<double> rndb(0, 1);
 
   std::unordered_map<int, double> probE = {
-    {-8, exp(-8 * beta * J)},
-    {-4, exp(-4 * beta * J)},
+    {-8, exp(8 * beta * J)},
+    {-4, exp(4 * beta * J)},
     {0, 1},
-    {4, exp(4 * beta * J)},
-    {8, exp(8 * beta * J)},
+    {4, exp(-4 * beta * J)},
+    {8, exp(-8 * beta * J)},
   };
 
   std::unordered_map<int, double> probM{
@@ -98,15 +99,17 @@ Spin Spin::configuration_update(const double &beta, const float &J, const float 
   for (unsigned int i = 0; i < max_iter; ++i){
 	  unsigned int row = static_cast<unsigned int>( floor(rndb(rng) * N));
     unsigned int col = static_cast<unsigned int>( floor(rndb(rng) * N));
-    Spin lattice_copy = *this;   
-    lattice_copy.lattice[ (row*N) + col ] = (lattice_copy.lattice[ (row*N) + col ] > 0) ? -1 : 1;
+   // Spin lattice_copy = *this;   
+    //lattice_copy.lattice[ (row*N) + col ] = (lattice_copy.lattice[ (row*N) + col ] > 0) ? -1 : 1;
 
-    dE = lattice_copy.close_neighbord_energy(row, col);
-    dM = 2*lattice_copy.lattice[ (row*N) + col ];
+    dE = close_neighbord_energy(row, col);
+    dM = 2*lattice[ (row*N) + col ];
     if (rndb(rng) < probM[dM]*probE[dE]){
-      *this = lattice_copy;
+     // *this = lattice_copy;
+      this->lattice[ (row*N) + col ] = (this->lattice[ (row*      N) + col ] > 0) ? -1 : 1;
+
     }
   }
 
-  return *this;
+//  return dE;
 }
