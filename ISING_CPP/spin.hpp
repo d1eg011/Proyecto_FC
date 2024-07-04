@@ -30,7 +30,7 @@ class Spin
     int get_N();
     int calcEnergy();
     int calcMagnetization();
-    Spin configuration_update(const double &beta, const float &J, const float &H, const unsigned int &max_iter); 
+    void configuration_update(const double &beta, const float &J, const float &H, const unsigned int &max_iter); 
 };
 #endif
 
