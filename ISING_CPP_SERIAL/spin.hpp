@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <random>
 #include <cmath>
+#include <cstdio>
+#include "gnuplot-iostream.h"
 
 class Spin
 {
@@ -25,10 +27,12 @@ class Spin
     Spin &operator=(const Spin &obj);
     
     //Methods
-    void print_lattice();
-    int get_N();
+    unsigned int get_N();
+    std::vector<int> get_lattice();
     int calcEnergy();
     int calcMagnetization();
+    void print_lattice();
+    void lattice_cmap();
     void configuration_update(const double &beta, const float &J, const float &H, const unsigned int &max_iter); 
 };
 #endif

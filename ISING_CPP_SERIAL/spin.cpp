@@ -21,9 +21,69 @@ Spin &Spin::operator=(const Spin &obj){
   return *this;
 }
 
-int Spin::get_N(){
+unsigned int Spin::get_N(){
   return N;
 }
+
+std::vector<int> Spin::get_lattice(){
+  return lattice;
+}
+
+void Spin::lattice_cmap(){
+// Initialize Gnuplot object
+    Gnuplot gp;
+  
+    // Set output terminal to JPEG format
+    gp << "set terminal epslatex color size 6.0in,5.0in standalone font "" 14\n";
+
+    // Set output file name
+    gp << "set output 'Figure.tex'\n";
+  
+    gp << "set border linewidth 6\n";
+  
+    // Set plot title and labels 
+    gp << "set title '2D Lattice'\n";
+  
+    // Define color palette
+    gp << "set palette defined (-1 'white', 0 'gray', 1 'black')\n";
+
+    // Set matrix dimensions
+    gp << "set size ratio -1\n";
+    gp << "set xrange [0:" << N - 1 << "]\n";
+    gp << "set yrange [0:" << N - 1 << "]\n";
+    gp << "set cbrange [-1:1]\n";
+    gp << "set pm3d map\n";
+
+    // Plot the matrix as an image
+    gp << "plot '-' matrix with image title ' '\n";
+
+    // Send matrix data to Gnuplot
+    for (unsigned int row = 0; row < N; ++row) {
+        for (unsigned int col = 0; col < N; ++col) {
+            gp << lattice[ (row * N) + col] << " ";
+        }
+        gp << "\n";
+    }
+    gp << "e\n";
+// Close the output file
+    gp << "set output\n";
+
+    // Flush the Gnuplot commands to ensure the file is written
+    gp.flush();
+
+    std::system("latex Figure.tex");
+    std::system("dvips Figure.dvi");
+    std::system("ps2pdf Figure.ps");
+
+    // Remove unnecessary files
+    std::remove("Figure.tex");
+    std::remove("Figure.log");
+    std::remove("Figure.aux");
+    std::remove("Figure-inc.eps");
+    std::remove("Figure.dvi");
+    std::remove("Figure.ps");
+}
+
 
 void Spin::print_lattice(){
   for (unsigned int i = 0; i < N; ++i){
