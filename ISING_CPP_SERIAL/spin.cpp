@@ -2,11 +2,15 @@
 
 Spin::Spin(const unsigned int &size){
   N = size;
+  energy = 2*size*size;
+  magnetization = size*size;
   lattice = std::vector<int>(size*size, 1);
 }
 
 Spin::Spin(const Spin &obj){
   N = obj.N;
+  energy = obj.energy;
+  magnetization = obj.magnetization;
   lattice = obj.lattice;
 }
 
@@ -16,6 +20,8 @@ Spin::~Spin(){
 
 Spin &Spin::operator=(const Spin &obj){
   N = obj.N;
+  energy = obj.energy;
+  magnetization = obj.magnetization;
   lattice = obj.lattice;
   
   return *this;
@@ -23,6 +29,14 @@ Spin &Spin::operator=(const Spin &obj){
 
 unsigned int Spin::get_N(){
   return N;
+}
+
+int Spin::get_energy(){
+  return energy;
+}
+
+int Spin::get_magnetization(){
+  return magnetization;
 }
 
 std::vector<int> Spin::get_lattice(){
@@ -104,7 +118,7 @@ int Spin::close_neighbord_energy(const unsigned int &row, const unsigned int &co
 }
 
 int Spin::calcEnergy(){
-  int energy = 0;
+  energy = 0;
   for (unsigned int row = 0; row < N; ++row){
     for (unsigned int col = 0; col < N; ++col){
       energy += 0.5*lattice[ (row*N) + col ]*(lattice[ ((row-1)*N)%N + col ] +
@@ -118,7 +132,7 @@ int Spin::calcEnergy(){
 }
   
 int Spin::calcMagnetization(){
-  int magnetization = 0;
+  magnetization = 0;
   for (unsigned int i = 0; i < N*N; ++i){
     magnetization += lattice[i];
   }
@@ -156,7 +170,8 @@ void Spin::configuration_update(const double &beta, const float &J, const float 
     dM = 2*lattice[ (row*N) + col ];
     if (rndb(rng) < probM[dM]*probE[dE]){
       this->lattice[ (row*N) + col ] = (this->lattice[ (row*      N) + col ] > 0) ? -1 : 1;
-
+      energy += dE;
+      magnetization += dM;
     }
   }
 

@@ -14,6 +14,8 @@ class Spin
   private:
     Spin(); //Default constructor
     unsigned int N; //Dimension of the lattice
+    int energy;
+    int magnetization;
     std::vector<int> lattice;
     //private methods access only by configuration update
     int close_neighbord_energy(const unsigned int &row, const unsigned int &col);
@@ -28,6 +30,8 @@ class Spin
     
     //Methods
     unsigned int get_N();
+    int get_energy();
+    int get_magnetization();
     std::vector<int> get_lattice();
     int calcEnergy();
     int calcMagnetization();
