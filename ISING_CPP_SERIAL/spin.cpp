@@ -4,6 +4,7 @@ Spin::Spin(const unsigned int &size){
   N = size;
   energy = 0;
   magnetization = 0;
+  sqenergy = 0;
   lattice = std::vector<int>(size*size, 1);
 }
 
@@ -11,6 +12,7 @@ Spin::Spin(const Spin &obj){
   N = obj.N;
   energy = obj.energy;
   magnetization = obj.magnetization;
+  sqenergy = obj.sqenergy;
   lattice = obj.lattice;
 }
 
@@ -22,6 +24,7 @@ Spin &Spin::operator=(const Spin &obj){
   N = obj.N;
   energy = obj.energy;
   magnetization = obj.magnetization;
+  sqenergy = obj.sqenergy;
   lattice = obj.lattice;
   
   return *this;
@@ -37,6 +40,10 @@ int Spin::getEnergy(){
 
 int Spin::getMagnetization(){
   return magnetization;
+}
+
+int Spin::getSqenergy(){
+  return sqenergy;
 }
 
 std::vector<int> Spin::get_lattice(){
@@ -143,6 +150,7 @@ double Spin::calcMagnetization(){
 void Spin::configuration_reset(){
   energy = 0;
   magnetization = 0;
+  sqenergy = 0;
   lattice = std::vector<int>(N*N, 1);
 }
 
@@ -179,6 +187,7 @@ void Spin::configuration_update(const double &beta, const double &J, const doubl
     }
     this->energy -= dE;
     this->magnetization += dM;
+    this->sqenergy += dE*dE;
   }
 
 }
