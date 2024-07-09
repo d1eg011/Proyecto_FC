@@ -2,8 +2,8 @@
 
 Spin::Spin(const unsigned int &size){
   N = size;
-  energy = 2*size*size;
-  magnetization = size*size;
+  energy = 0;
+  magnetization = 0;
   lattice = std::vector<int>(size*size, 1);
 }
 
@@ -31,11 +31,11 @@ unsigned int Spin::get_N(){
   return N;
 }
 
-int Spin::get_energy(){
+int Spin::getEnergy(){
   return energy;
 }
 
-int Spin::get_magnetization(){
+int Spin::getMagnetization(){
   return magnetization;
 }
 
@@ -117,37 +117,36 @@ int Spin::close_neighbord_energy(const unsigned int &row, const unsigned int &co
   return dE;
 }
 
-int Spin::calcEnergy(){
-  energy = 0;
+double Spin::calcEnergy(){
+  double E = 0;
   for (unsigned int row = 0; row < N; ++row){
     for (unsigned int col = 0; col < N; ++col){
-      energy += 0.5*lattice[ (row*N) + col ]*(lattice[ ((row-1)*N)%N + col ] +
+      E += 0.5*lattice[ (row*N) + col ]*(lattice[ ((row-1)*N)%N + col ] +
                                               lattice[ ((row+1)*N)%N + col ] +
                                               lattice[ (row*N) + (col-1)%N ] +
                                               lattice[ (row*N) + (col+1)%N ] );
     }
   }
 
-  return energy;
+  return E;
 }
   
-int Spin::calcMagnetization(){
-  magnetization = 0;
+double Spin::calcMagnetization(){
+  double M = 0.0;
   for (unsigned int i = 0; i < N*N; ++i){
-    magnetization += lattice[i];
+    M += lattice[i];
   }
 
-  return magnetization;
+  return M;
 }
 
 void Spin::configuration_reset(){
+  energy = 0;
+  magnetization = 0;
   lattice = std::vector<int>(N*N, 1);
-  energy = 2*N*N;
-  magnetization = N*N;
 }
 
-void Spin::configuration_update(const double &beta, const float &J, const float &H, const unsigned int &max_iter){
-
+void Spin::configuration_update(const double &beta, const double &J, const double &H, const unsigned int &max_iter){
   int dE = 0;
   int dM = 0;
   
@@ -174,9 +173,12 @@ void Spin::configuration_update(const double &beta, const float &J, const float 
 
     dE = close_neighbord_energy(row, col);
     dM = 2*lattice[ (row*N) + col ];
+
     if (rndb(rng) < probM[dM]*probE[dE]){
       this->lattice[ (row*N) + col ] = (this->lattice[ (row*      N) + col ] > 0) ? -1 : 1;
     }
+    this->energy -= dE;
+    this->magnetization += dM;
   }
 
 }
