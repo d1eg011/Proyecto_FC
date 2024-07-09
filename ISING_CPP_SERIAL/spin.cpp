@@ -140,6 +140,12 @@ int Spin::calcMagnetization(){
   return magnetization;
 }
 
+void Spin::configuration_reset(){
+  lattice = std::vector<int>(N*N, 1);
+  energy = 2*N*N;
+  magnetization = N*N;
+}
+
 void Spin::configuration_update(const double &beta, const float &J, const float &H, const unsigned int &max_iter){
 
   int dE = 0;
@@ -170,8 +176,6 @@ void Spin::configuration_update(const double &beta, const float &J, const float 
     dM = 2*lattice[ (row*N) + col ];
     if (rndb(rng) < probM[dM]*probE[dE]){
       this->lattice[ (row*N) + col ] = (this->lattice[ (row*      N) + col ] > 0) ? -1 : 1;
-      energy += dE;
-      magnetization += dM;
     }
   }
 
