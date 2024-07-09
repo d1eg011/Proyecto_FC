@@ -30,15 +30,15 @@ class Spin
     
     //Methods
     unsigned int get_N();
-    int get_energy();
-    int get_magnetization();
+    int getEnergy();
+    int getMagnetization();
     std::vector<int> get_lattice();
-    int calcEnergy();
-    int calcMagnetization();
+    double calcEnergy();
+    double calcMagnetization();
     void print_lattice();
     void lattice_cmap();
     void configuration_reset();
-    void configuration_update(const double &beta, const float &J, const float &H, const unsigned int &max_iter); 
+    void configuration_update(const double &beta, const double &J, const double &H, const unsigned int &max_iter); 
 };
 #endif
 
