@@ -1,4 +1,6 @@
 #include "spin.hpp"
+#include <fstream>
+#include <cstdlib>
 
 Spin::Spin(const unsigned int &size){
   N = size;
@@ -50,22 +52,18 @@ std::vector<int> Spin::get_lattice(){
   return lattice;
 }
 
-void Spin::lattice_cmap(){
-// Initialize Gnuplot object
+void Spin::lattice_cmap(const unsigned int& filenumber){
     Gnuplot gp;
-  
-    // Set output terminal to JPEG format
-    gp << "set terminal epslatex color size 6.0in,5.0in standalone font "" 14\n";
 
-    // Set output file name
-    gp << "set output 'Figure.tex'\n";
-  
+    std::string filename = "lattice_" + std::to_string(filenumber);
+
+    gp << "set terminal epslatex color size 6.0in,5.0in standalone font \" 14\"\n";
+    gp << "set output '" << filename << ".tex'\n";
+
     gp << "set border linewidth 6\n";
-  
-    // Set plot title and labels 
+
     gp << "set title '2D Lattice'\n";
   
-    // Define color palette
     gp << "set palette defined (-1 'white', 0 'gray', 1 'black')\n";
 
     // Set matrix dimensions
@@ -81,30 +79,32 @@ void Spin::lattice_cmap(){
     // Send matrix data to Gnuplot
     for (unsigned int row = 0; row < N; ++row) {
         for (unsigned int col = 0; col < N; ++col) {
-            gp << lattice[ (row * N) + col] << " ";
+            gp << lattice[(row * N) + col] << " ";
         }
         gp << "\n";
-    }
+    }   
     gp << "e\n";
-// Close the output file
     gp << "set output\n";
 
     // Flush the Gnuplot commands to ensure the file is written
     gp.flush();
 
-    std::system("latex Figure.tex");
-    std::system("dvips Figure.dvi");
-    std::system("ps2pdf Figure.ps");
+    std::string cmdlatex = "latex " + filename + ".tex";
+    std::string cmddvips = "dvips " + filename + ".dvi";
+    std::string cmdps2pdf = "ps2pdf " + filename + ".ps";
+
+    std::system(cmdlatex.c_str());
+    std::system(cmddvips.c_str());
+    std::system(cmdps2pdf.c_str());
 
     // Remove unnecessary files
-    std::remove("Figure.tex");
-    std::remove("Figure.log");
-    std::remove("Figure.aux");
-    std::remove("Figure-inc.eps");
-    std::remove("Figure.dvi");
-    std::remove("Figure.ps");
+    std::remove((filename + ".tex").c_str());
+    std::remove((filename + ".log").c_str());
+    std::remove((filename + ".aux").c_str());
+    std::remove((filename + "-inc.eps").c_str());
+    std::remove((filename + ".dvi").c_str());
+    std::remove((filename + ".ps").c_str());
 }
-
 
 void Spin::print_lattice(){
   for (unsigned int i = 0; i < N; ++i){

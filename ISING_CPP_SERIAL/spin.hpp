@@ -38,7 +38,7 @@ class Spin
     double calcEnergy();
     double calcMagnetization();
     void print_lattice();
-    void lattice_cmap();
+    void lattice_cmap(const unsigned int& filenumber);
     void configuration_reset();
     void configuration_update(const double &beta, const double &J, const double &H, const unsigned int &max_iter); 
 };
