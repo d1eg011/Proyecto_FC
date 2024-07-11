@@ -159,11 +159,12 @@ void Spin::simulTemp(const double& T_max, const double& T_min, const unsigned in
 
 int Spin::close_neighbord_energy(const unsigned int &row, const unsigned int &col){
   int dE = 0;
-  dE = 2*lattice[ (row*N) + col ]*( lattice[ ((row-1)*N)%N + col ] + 
-                                    lattice[ ((row+1)*N)%N + col ] + 
-                                    lattice[ (row*N) + (col-1)%N ] + 
-                                    lattice[ (row*N) + (col+1)%N ] );
-  return dE;
+  dE = 2*lattice[ (row*N) + col ]*( lattice[ ((row + N - 1) % N) * N + col ] + 
+                                    lattice[((row + 1) % N) * N + col] + 
+                                    lattice[row * N + (col + N - 1) % N] +
+                                    lattice[row * N + (col + 1) % N]
+                                   );
+  return dE; 
 }
 
 void Spin::configuration_reset(){
@@ -202,11 +203,8 @@ void Spin::configuration_update(const double &beta, const double &J, const doubl
     dM = 2*lattice[ (row*N) + col ];
 
     if (rndb(rng) < probM[dM]*probE[dE]){
-      this->lattice[ (row*N) + col ] = (this->lattice[ (row*N) + col ] > 0) ? -1 : 1;
+      lattice[ (row*N) + col ] = -lattice[ (row*N) + col ];
     }
-    this->energy -= dE;
-    this->magnetization += dM;
-    this->sqenergy += dE*dE;
   }
 
 }
