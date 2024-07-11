@@ -53,13 +53,14 @@ int main(){
     lattice.configuration_update(1/T[i], J, H, its);
     
     mean_energy[i] = lattice.getEnergy() / (4.0*its);
-    mean_magnetization[i] = std::abs(lattice.getMagnetization()) / (2.0*its);
-    specificHeat[i] = (1/std::pow(T[i],2))*( lattice.getSqenergy()/(8.0*its) - std::pow( lattice.getEnergy()/(1.0*its),2)/8.0 );
+    mean_magnetization[i] = lattice.getMagnetization() / (2.0*its);
+    specificHeat[i] = ( 1/std::pow(T[i],2) ) * ( lattice.getSqenergy()/(8.0*its) - std::pow( lattice.getEnergy()/(1.0*its), 2)/8.0 );
     
-
     lattice.configuration_reset();
   }
   
+  
+
   plot(T, mean_energy, "Energy_plot", "Temperature (kT)", "Energy", "'red'" ,"mean energy per spin");
 
   plot(T, mean_magnetization, "Magnetization_plot", "Temperature (kT)", "Magnetization", "'blue'" ,"mean magnetization per spin");

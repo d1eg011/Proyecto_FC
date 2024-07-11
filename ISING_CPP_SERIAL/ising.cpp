@@ -85,12 +85,7 @@ void Spin::lattice_cmap(const unsigned int& filenumber){
     gp << "e\n";
     gp << "set output\n";
 
-    // Flush the Gnuplot commands to ensure the file is written
     gp.flush();
-
-   // std::string cmdlatex = "latex " + filename + ".tex";
-   // std::string cmddvips = "dvips " + filename + ".dvi";
-   // std::string cmdps2pdf = "ps2pdf " + filename + ".ps";
 
     std::system( ("latex " + filename + ".tex").c_str() );
     std::system( ("dvips " + filename + ".dvi" ).c_str() );
@@ -115,8 +110,8 @@ int Spin::close_neighbord_energy(const unsigned int &row, const unsigned int &co
 
 void Spin::configuration_reset(){
   energy = 0;
-  magnetization = 0;
   sqenergy = 0;
+  magnetization = 0;
   lattice = std::vector<int>(N*N, 1);
 }
 
