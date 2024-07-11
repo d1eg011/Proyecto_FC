@@ -50,18 +50,19 @@ std::vector<int> Ising::get_lattice(){
   return lattice;
 }
 
-void Ising::lattice_cmap(const unsigned int& filenumber){
+void Ising::lattice_cmap(const unsigned int& filenumber, const double& temperature, const unsigned int& iterations){
    
     Gnuplot gp;
 
     std::string filename = "lattice_" + std::to_string(filenumber);
+    std::string Title = "2D Lattice T = " + std::to_string(temperature) + " Iterations = " + std::to_string(iterations);   
 
     gp << "set terminal epslatex color size 6.0in,5.0in standalone font \" 14\"\n";
     gp << "set output '" << filename << ".tex'\n";
 
     gp << "set border linewidth 6\n";
 
-    gp << "set title '2D Lattice'\n";
+    gp << "set title'" << Title << "'\n";
   
     gp << "set palette defined (-1 'white', 0 'gray', 1 'black')\n";
 

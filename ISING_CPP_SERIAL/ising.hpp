@@ -39,7 +39,7 @@ class Ising
     int getMagnetization();
     int getSqenergy();
     std::vector<int> get_lattice();
-    void lattice_cmap(const unsigned int& filenumber);
+    void lattice_cmap(const unsigned int& filenumber, const double &temperature, const unsigned int &iterations);
     void configuration_reset();
     void configuration_update(const double &beta, const double &J, const double &H, const unsigned int &max_iter);
     void simulTemp(const double& T_max, const double& T_min, const unsigned int& steps, const unsigned int& iterations, const double& J, const double& H);

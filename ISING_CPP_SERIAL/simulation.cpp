@@ -3,8 +3,8 @@
 int main(){
 
   unsigned int size = 500;
-  unsigned int max_iter = 2000000;
-  unsigned int step_size = 10000;
+  unsigned int max_iter = 10000000;
+  unsigned int step_size = 100000;
   double J = 1.0;
   double H = 0.0;
   double beta_hot = 0.2;
@@ -12,16 +12,16 @@ int main(){
   
   unsigned int steps = (max_iter/step_size);
 
-  Spin lattice(size);
+  Ising ising(size);
 
   for (unsigned int i = 1; i < steps+1; ++i){
-    lattice.configuration_update(beta_hot , J, H, i*step_size);
-    lattice.lattice_cmap(i);
+    ising.configuration_update(beta_hot , J, H, i*step_size);
+    ising.lattice_cmap(i, 1/beta_hot, i*step_size);
   }
   
   for (unsigned int i = 1; i < steps+1; ++i){
-    lattice.configuration_update(beta_cold, J, H, i*step_size);
-    lattice.lattice_cmap( i + steps);
+    ising.configuration_update(beta_cold, J, H, i*step_size*10);
+    ising.lattice_cmap( i + steps, 1/beta_cold, i*step_size*10);
   }
 
 
