@@ -10,7 +10,7 @@ int main(){
   double T_min = 0.01;
   double T_max = 4.0;
 
-  Spin lattice(size);
+  Ising lattice(size);
 
   lattice.simulTemp(T_max, T_min, steps, its, J, H);
 

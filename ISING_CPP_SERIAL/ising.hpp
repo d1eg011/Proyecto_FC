@@ -11,10 +11,10 @@
 #include <fstream>
 #include "gnuplot-iostream.h"
 
-class Spin
+class Ising
 {
   private:
-    Spin(); //Default constructor
+    Ising(); //Default constructor
     unsigned int N; //Dimension of the lattice
     int energy;
     int magnetization;
@@ -28,10 +28,10 @@ class Spin
   public:
 
     //Constructors
-    Spin(const unsigned int &size);
-    ~Spin();
-    Spin(const Spin &obj);
-    Spin &operator=(const Spin &obj);
+    Ising(const unsigned int &size);
+    ~Ising();
+    Ising(const Ising &obj);
+    Ising &operator=(const Ising &obj);
     
     //Methods
     unsigned int get_N();

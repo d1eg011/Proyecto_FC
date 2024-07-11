@@ -1,6 +1,6 @@
 #include "ising.hpp"
 
-Spin::Spin(const unsigned int &size){
+Ising::Ising(const unsigned int &size){
   N = size;
   energy = 0;
   sqenergy = 0;
@@ -8,7 +8,7 @@ Spin::Spin(const unsigned int &size){
   lattice = std::vector<int>(size*size, 1);
 }
 
-Spin::Spin(const Spin &obj){
+Ising::Ising(const Ising &obj){
   N = obj.N;
   energy = obj.energy;
   sqenergy = obj.sqenergy;
@@ -16,11 +16,11 @@ Spin::Spin(const Spin &obj){
   lattice = obj.lattice;
 }
 
-Spin::~Spin(){
+Ising::~Ising(){
 
 }
 
-Spin &Spin::operator=(const Spin &obj){
+Ising &Ising::operator=(const Ising &obj){
   N = obj.N;
   energy = obj.energy;
   sqenergy = obj.sqenergy;
@@ -30,27 +30,27 @@ Spin &Spin::operator=(const Spin &obj){
   return *this;
 }
 
-unsigned int Spin::get_N(){
+unsigned int Ising::get_N(){
   return N;
 }
 
-int Spin::getEnergy(){
+int Ising::getEnergy(){
   return energy;
 }
 
-int Spin::getMagnetization(){
+int Ising::getMagnetization(){
   return magnetization;
 }
 
-int Spin::getSqenergy(){
+int Ising::getSqenergy(){
   return sqenergy;
 }
 
-std::vector<int> Spin::get_lattice(){
+std::vector<int> Ising::get_lattice(){
   return lattice;
 }
 
-void Spin::lattice_cmap(const unsigned int& filenumber){
+void Ising::lattice_cmap(const unsigned int& filenumber){
    
     Gnuplot gp;
 
@@ -99,7 +99,7 @@ void Spin::lattice_cmap(const unsigned int& filenumber){
     std::remove( (filename + ".ps").c_str() );
 }
 
-void Spin::plot(std::vector<double>& x, std::vector<double>& y, std::string file_name, std::string Xlabel, std::string Ylabel, std::string color, std::string Legend){
+void Ising::plot(std::vector<double>& x, std::vector<double>& y, std::string file_name, std::string Xlabel, std::string Ylabel, std::string color, std::string Legend){
    Gnuplot gp;
 
     // Set the terminal to pdfcairo for direct PDF output
@@ -118,7 +118,7 @@ void Spin::plot(std::vector<double>& x, std::vector<double>& y, std::string file
     std::cout << "Plot saved to " << file_name << ".pdf" << std::endl;
 }
 
-std::vector<double> Spin::sampling(const double &init, const double &end, const unsigned int &steps){
+std::vector<double> Ising::sampling(const double &init, const double &end, const unsigned int &steps){
   
   std::vector<double> array(steps);
   double step_size = (end-init)/(steps);
@@ -130,7 +130,7 @@ std::vector<double> Spin::sampling(const double &init, const double &end, const 
   return array;
 }
 
-void Spin::simulTemp(const double& T_max, const double& T_min, const unsigned int& steps, const unsigned int& iterations, const double& J, const double& H){
+void Ising::simulTemp(const double& T_max, const double& T_min, const unsigned int& steps, const unsigned int& iterations, const double& J, const double& H){
 
   std::vector<double> T(steps , 0.0);
   std::vector<double> mean_energy( steps, 0.0);
@@ -157,7 +157,7 @@ void Spin::simulTemp(const double& T_max, const double& T_min, const unsigned in
 
 }
 
-int Spin::close_neighbord_energy(const unsigned int &row, const unsigned int &col){
+int Ising::close_neighbord_energy(const unsigned int &row, const unsigned int &col){
   int dE = 0;
   dE = 2*lattice[ (row*N) + col ]*( lattice[ ((row + N - 1) % N) * N + col ] + 
                                     lattice[((row + 1) % N) * N + col] + 
@@ -167,14 +167,14 @@ int Spin::close_neighbord_energy(const unsigned int &row, const unsigned int &co
   return dE; 
 }
 
-void Spin::configuration_reset(){
+void Ising::configuration_reset(){
   energy = 0;
   sqenergy = 0;
   magnetization = 0;
   lattice = std::vector<int>(N*N, 1);
 }
 
-void Spin::configuration_update(const double &beta, const double &J, const double &H, const unsigned int &max_iter){
+void Ising::configuration_update(const double &beta, const double &J, const double &H, const unsigned int &max_iter){
   int dE = 0;
   int dM = 0;
   
@@ -204,7 +204,10 @@ void Spin::configuration_update(const double &beta, const double &J, const doubl
 
     if (rndb(rng) < probM[dM]*probE[dE]){
       lattice[ (row*N) + col ] = -lattice[ (row*N) + col ];
+      energy += dE;
+      sqenergy += dE*dE;
     }
+    magnetization += dM;
   }
 
 }
