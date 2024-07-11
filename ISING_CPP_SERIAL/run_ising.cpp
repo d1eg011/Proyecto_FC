@@ -1,4 +1,4 @@
-#include "spin.hpp"
+#include "ising.hpp"
 
 void plot(std::vector<double>& x, std::vector<double>& y, std::string file_name, std::string Xlabel, std::string Ylabel, std::string color, std::string Legend) {
     Gnuplot gp;
@@ -64,7 +64,7 @@ int main(){
 
   plot(T, mean_magnetization, "Magnetization_plot", "Temperature (kT)", "Magnetization", "'blue'" ,"mean magnetization per spin");
 
-  plot(T, specificHeat, "SpecHeat_plot", "Temperature (kT)", "Specific Heat","'#3B1E08'"  , "specific heat");
+  plot(T, specificHeat, "SpecHeat_plot", "Temperature (kT)", "Specific Heat","'#00B1A0'"  , "specific heat");
 
 
   return 0;
