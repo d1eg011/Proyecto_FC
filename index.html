@@ -308,8 +308,8 @@
 <h2 id="calculate-energy">Calculate energy</h2>
 <p>Para esta función, utiliza la funcionalidad de <code>numpy.roll</code>, para sumar sobre los vecinos más cercanos de la siguiente forma:</p>
 <ul>
-<li>Se le dan los argumentos del array de espines, se le indica que el cambio de posiciones en el arreglo, en este caso va a ser solamente en una unidad (1 o -1), respecto a uno de los dos ejes posibles 0 y 1.</li>
-<li>Y devuleven el nuevo arreglo de espines tras aplicar el cambio de posiciones.</li>
+<li>Se le dan los argumentos del array de espines, se le indica que el cambio de posiciones en el arreglo, que en este caso va a ser solamente en una unidad (1 o -1), respecto a uno de los dos ejes posibles 0 y 1.</li>
+<li>Devuelven el nuevo arreglo de espines tras aplicar el cambio de posiciones.</li>
 </ul>
 <p>Esto se ejemplifica con:</p>
 <pre><code>    &gt;&gt;&gt; espines = np.array([[1,-1,1],[-1,1,1]])
@@ -323,7 +323,7 @@
 <li>Y al final se suman sobre todas las contribuciones de cada espin y se multiplica por el parámetro de interación J.</li>
 </ul>
 <h2 id="calculate-de">Calculate dE</h2>
-<p>En este caso se analiza solamnete el cambio de energı́a del espín que cambia con respecto a los cuatro espines cercanos ya mencionados, dicho cambio de energía va a estar basado en:</p>
+<p>En este caso se analiza solamente el cambio de energı́a del espín que cambia con respecto a los cuatro espines cercanos ya mencionados. Dicho cambio de energía va a estar basado en</p>
 <div class="arithmatex">\[
 dE = 2 \hat{S}^{z}_{i,j} \left[ \hat{S}^{z}_{i,j+1} + \hat{S}^{z}_{i,j-1} + \hat{S}^{z}_{i+1,j} + \hat{S}^{z}_{i-1,j} \right]
 \]</div>
