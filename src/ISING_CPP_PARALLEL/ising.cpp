@@ -4,7 +4,7 @@ Ising::Ising(const unsigned int &size){
   N = size;
   energy = 0;
   sqenergy = 0;
-  magnetization = size*size;
+  magnetization = 0;
   lattice = std::vector<int>(size*size, 1);
 }
 
