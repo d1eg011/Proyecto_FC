@@ -9,7 +9,7 @@ En la carpeta de Plots, se encuentran las gráficas obtenidas apartir de los có
 
 El jupyter-notebook `test.ipynb` contiene las gráficas del código de python.
 
-El jupyter'notebook `proyecto?fc.ipynb` contiene el informe del proyecto con sus resultados y análisis.
+El jupyter'notebook `proyecto_fc.ipynb` contiene el informe del proyecto con sus resultados y análisis.
 
 Por último, la carpeta de `ising_doc` tiene los documentos utilizados para generar la documentación del código de python, que se encuentra en: `https://d1eg011.github.io/Proyecto_FC/` 
 
