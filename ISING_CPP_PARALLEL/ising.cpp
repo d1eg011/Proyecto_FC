@@ -198,19 +198,19 @@ void Ising::configuration_update(const double &beta, const double &J, const doub
   #pragma omp parallel reduction( + : energy, magnetization, sqenergy) shared(rng) private(dE,dM)
   {
   #pragma omp for schedule(static)
-  for (unsigned int i = 0; i < max_iter; ++i){
-	  unsigned int row = static_cast<unsigned int>( floor(rndb(rng) * N));
-    unsigned int col = static_cast<unsigned int>( floor(rndb(rng) * N));
+    for (unsigned int i = 0; i < max_iter; ++i){
+	    unsigned int row = static_cast<unsigned int>( floor(rndb(rng) * N));
+      unsigned int col = static_cast<unsigned int>( floor(rndb(rng) * N));
 
-    dE = close_neighbord_energy(row, col);
-    dM = 2*lattice[ (row*N) + col ];
+      dE = close_neighbord_energy(row, col);
+      dM = 2*lattice[ (row*N) + col ];
 
-    if (rndb(rng) < probM[dM]*probE[dE]){
-      lattice[ (row*N) + col ] = -lattice[ (row*N) + col ];
-      energy += -dE;
-      sqenergy += dE*dE;
+      if (rndb(rng) < probM[dM]*probE[dE]){
+        lattice[ (row*N) + col ] = -lattice[ (row*N) + col ];
+        energy += -dE;
+        sqenergy += dE*dE;
+      }
+      magnetization += dM;
     }
-    magnetization += dM;
-  }
   }
 }
